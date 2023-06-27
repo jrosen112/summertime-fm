@@ -12,6 +12,12 @@ PlaybackControls {
     background: rgb(28, 28, 28);
 }
 
+#rewind {
+    width: 50%;
+    dock: left;
+    background: rgb(28, 28, 28);
+}
+
 #play {
     dock: left;
     margin-top: 2;

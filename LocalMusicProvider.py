@@ -36,7 +36,7 @@ class LocalMusicProvider(MusicProvider):
         self.is_paused = True
 
     def rewind(self) -> None:
-        pass
+        music.rewind()
 
     def skip(self) -> None:
         pass

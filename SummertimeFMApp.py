@@ -6,19 +6,21 @@ from textual.reactive import var
 
 from LocalMusicProvider import LocalMusicProvider
 
+
 # TODO: playback controls custom widget
 class PlaybackControls(Footer):
     """Widget to hold playback controls"""
 
     def compose(self) -> ComposeResult:
         yield Static(id="songtitle")
+        yield Button("Rewind", id="rewind")
         yield Button("Play", id="play")
         yield Button("Pause", id="pause")
 
 
 # TODO:
 # - CSS constants?
-# - combine play/pause, add rewind and skip
+# - combine play/pause, add rewind and skip (AND icons)
 # - file tree thing for viewing file lists of songs
 # - custom header? pizzazz
 # - playlist(?) object -> for queueing, skipping, rewinding
@@ -32,7 +34,8 @@ class SummertimeFMApp(App):
     CSS_PATH = "home_screen.css"
     BINDINGS = [
         ("p", "play", "Play"),
-        ("l", "pause", "Pause")
+        ("l", "pause", "Pause"),
+        ("r", "rewind", "Rewind")
     ]
 
     def compose(self) -> ComposeResult:
@@ -41,7 +44,6 @@ class SummertimeFMApp(App):
             yield Header(show_clock=True)
             yield PlaybackControls()
             yield Footer()
-
 
     @on(Button.Pressed, "#play")
     def play_pressed(self) -> None:
@@ -63,6 +65,13 @@ class SummertimeFMApp(App):
 
     def action_pause(self) -> None:
         self.pause_pressed()
+
+    @on(Button.Pressed, "#rewind")
+    def rewind_pressed(self) -> None:
+        self.music_provider.rewind()
+
+    def action_rewind(self) -> None:
+        self.rewind_pressed()
 
     def watch_songtitle(self, value: str) -> None:
         self.query_one("#songtitle", Static).update(value)
