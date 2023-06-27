@@ -30,32 +30,39 @@ class SummertimeFMApp(App):
     songtitle = var("Song Title")
 
     CSS_PATH = "home_screen.css"
+    BINDINGS = [
+        ("p", "play", "Play"),
+        ("l", "pause", "Pause")
+    ]
 
     def compose(self) -> ComposeResult:
         self.music_provider = LocalMusicProvider("/Users/jaredrosen/Desktop/Desktop/test_music")
         with Container(id="summertimefm", classes="summertimefm"):
-            # yield Static(id="songtitle")
-            # yield Button("Play", id="play", variant="primary", classes="playbackButtons")
-            # yield Button("Pause", id="pause", variant="warning", classes="playbackButtons")
             yield Header(show_clock=True)
             yield PlaybackControls()
             yield Footer()
 
 
     @on(Button.Pressed, "#play")
-    def play_pressed(self):
+    def play_pressed(self) -> None:
         # TODO: this logic should be in MusicProvider, not here
         if self.music_provider.is_playing():
             return
         self.music_provider.play()
         self.songtitle = self.music_provider.current_song
 
+    def action_play(self) -> None:
+        self.play_pressed()
+
     @on(Button.Pressed, "#pause")
-    def pause_pressed(self):
+    def pause_pressed(self) -> None:
         # TODO: same with this guy here
         if not self.music_provider.is_playing():
             return
         self.music_provider.pause()
+
+    def action_pause(self) -> None:
+        self.pause_pressed()
 
     def watch_songtitle(self, value: str) -> None:
         self.query_one("#songtitle", Static).update(value)
