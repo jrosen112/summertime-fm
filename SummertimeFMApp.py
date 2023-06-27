@@ -1,33 +1,58 @@
 from textual import events, on
 from textual.app import App, ComposeResult
 from textual.containers import Container
-from textual.widgets import Button, Static
+from textual.widgets import Button, Static, Header, Footer
 from textual.reactive import var
 
 from LocalMusicProvider import LocalMusicProvider
 
+# TODO: playback controls custom widget
+class PlaybackControls(Footer):
+    """Widget to hold playback controls"""
 
+    def compose(self) -> ComposeResult:
+        yield Static(id="songtitle")
+        yield Button("Play", id="play")
+        yield Button("Pause", id="pause")
+
+
+# TODO:
+# - CSS constants?
+# - combine play/pause, add rewind and skip
+# - file tree thing for viewing file lists of songs
+# - custom header? pizzazz
+# - playlist(?) object -> for queueing, skipping, rewinding
+#   - stack/list for queue
+#   - manage queue when playing song (not shuffled list)
 class SummertimeFMApp(App):
     """Setting up Terminal UI for SummertimeFM"""
 
     songtitle = var("Song Title")
 
+    CSS_PATH = "home_screen.css"
+
     def compose(self) -> ComposeResult:
         self.music_provider = LocalMusicProvider("/Users/jaredrosen/Desktop/Desktop/test_music")
-        with Container(id="summertimefm"):
-            yield Button("Play", id="play", variant="primary")
-            yield Button("Pause", id="pause", variant="warning")
-            yield Static(id="songtitle")
+        with Container(id="summertimefm", classes="summertimefm"):
+            # yield Static(id="songtitle")
+            # yield Button("Play", id="play", variant="primary", classes="playbackButtons")
+            # yield Button("Pause", id="pause", variant="warning", classes="playbackButtons")
+            yield Header(show_clock=True)
+            yield PlaybackControls()
+            yield Footer()
+
 
     @on(Button.Pressed, "#play")
     def play_pressed(self):
-        # if self.music_provider.is_playing():
-        #     return
+        # TODO: this logic should be in MusicProvider, not here
+        if self.music_provider.is_playing():
+            return
         self.music_provider.play()
         self.songtitle = self.music_provider.current_song
 
     @on(Button.Pressed, "#pause")
     def pause_pressed(self):
+        # TODO: same with this guy here
         if not self.music_provider.is_playing():
             return
         self.music_provider.pause()

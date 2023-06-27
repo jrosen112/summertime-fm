@@ -26,7 +26,7 @@ class LocalMusicProvider(MusicProvider):
 
         music.set_volume(1.0)
         music.load(shuffled_list[0])
-        self.current_song = shuffled_list[0]
+        self.current_song = shuffled_list[0].name.rstrip(".mp3")
         self.is_paused = False
         music.play()
 
@@ -41,9 +41,9 @@ class LocalMusicProvider(MusicProvider):
     def skip(self) -> None:
         pass
 
-    def get_all_songs(self) -> list[str]:
+    def get_all_songs(self) -> list[Path]:
         """Gets list of song filenames from filepath attribute"""
-        return [str(song) for song in self.filepath.glob("*.mp3")]
+        return [song for song in self.filepath.glob("*.mp3")]
 
     def is_playing(self) -> bool:
         return music.get_busy()

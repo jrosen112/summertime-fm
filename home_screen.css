@@ -1,0 +1,32 @@
+Screen {
+    overflow: auto
+}
+
+PlaybackControls {
+    layout: horizontal;
+    height: 5;
+    margin-top: 42;
+    min-width: 50;
+    padding: 0;
+    margin-bottom: 1;
+    background: rgb(28, 28, 28);
+}
+
+#play {
+    dock: left;
+    margin-top: 2;
+    width: 50%;
+    background: rgb(28, 28, 28);
+}
+
+#pause {
+    dock: right;
+    margin-top: 2;
+    width: 50%;
+    background: rgb(28, 28, 28);
+}
+
+#songtitle {
+    dock: left;
+    content-align: center middle;
+}
