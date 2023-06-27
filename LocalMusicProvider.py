@@ -30,9 +30,9 @@ class LocalMusicProvider(MusicProvider):
         self.is_paused = False
         music.play()
 
-
     def pause(self):
-        music.pause()
+        if self.is_playing():
+            music.pause()
         self.is_paused = True
 
     def rewind(self) -> None:
